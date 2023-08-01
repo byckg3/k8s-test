@@ -9,3 +9,4 @@
 - kubectl get deploy( deployments )
 - kubectl delete all --all
 - kubectl delete deployment <DEPLOY_NAME>
+- kubectl apply -f .

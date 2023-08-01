@@ -1,24 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: currency-demo
+  name: currency-demo-deploy
 spec:
   replicas: 3
+  minReadySeconds: 10
   selector:
     matchLabels:
       app: currency-demo
   template:
     metadata:
-      name: currency-demo-pod
       labels:
         app: currency-demo
     spec:
       containers:
-      - name: currency-demo-container
-        image: byckg3/currency-demo
+      - image: byckg3/currency-demo
+        name: currency-demo-ctr
         ports:
-        - name: currency-port
+        - name: http-port
           containerPort: 8080
+        readinessProbe:
+          periodSeconds: 2
+          httpGet:
+            path: /currencies
+            port: http-port
+        livenessProbe:
+          httpGet:
+            path: /currencies
+            port: http-port
         resources:
           limits:
             memory: "128Mi"
@@ -29,8 +38,9 @@ kind: Service
 metadata:
   name: currency-demo-svc
 spec:
+  type: LoadBalancer
   selector:
     app: currency-demo
   ports:
   - port: 80
-    targetPort: currency-port
+    targetPort: http-port
