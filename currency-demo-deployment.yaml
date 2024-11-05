@@ -20,14 +20,16 @@ spec:
         - name: http-port
           containerPort: 8080
         readinessProbe:
-          periodSeconds: 2
+          periodSeconds: 1
+          initialDelaySeconds: 5
           httpGet:
             path: /currencies
             port: http-port
-        livenessProbe:
-          httpGet:
-            path: /currencies
-            port: http-port
+        # livenessProbe:
+        #   httpGet:
+        #     path: /currencies
+        #     port: http-port
+        #   initialDelaySeconds: 15
         resources:
           limits:
             memory: "128Mi"
