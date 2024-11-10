@@ -1,5 +1,17 @@
 # k8s-test
 
+### terraform commands
+- terraform init
+- terraform fmt
+- terraform destroy -auto-approve
+
+
+### aws cli commands
+- aws eks get-token --cluster-name <CLUSTER_NAME>
+- aws eks --region ap-northeast-1 update-kubeconfig \\\
+  --name $(terraform output -raw cluster_name)
+
+
 ### k8s commands
 - kubectl cluster-info
 - kubectl get no( nodes )
@@ -12,17 +24,6 @@
 - kubectl apply -f .
 - kubectl rollout status deploy
 - rm *.yaml
-
-### terraform commands
-- terraform init
-- terraform fmt
-- terraform destroy -auto-approve
-
-
-### aws cli commands
-- aws eks get-token --cluster-name <CLUSTER_NAME>
-- aws eks --region ap-northeast-1 update-kubeconfig \\\
-  --name $(terraform output -raw cluster_name)
 
 
 ### references
