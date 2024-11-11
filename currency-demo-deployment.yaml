@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: currency-demo-deploy
   namespace: default
+  name: currency-demo-deploy
 spec:
   replicas: 3
   minReadySeconds: 10
