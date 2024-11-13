@@ -9,4 +9,4 @@ spec:
     app: currency-demo
   ports:
   - port: 80
-    targetPort: http-port
+    targetPort: demo-http-port

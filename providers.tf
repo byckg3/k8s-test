@@ -10,26 +10,45 @@ data "terraform_remote_state" "eks" {
 }
 
 # Retrieve EKS cluster information
-provider "aws" {
-  region  = data.terraform_remote_state.eks.outputs.aws_region
-  profile = "tf-user"
+locals {
+  eks_cluster_name = data.terraform_remote_state.eks.outputs.eks_cluster_name
+  aws_region       = data.terraform_remote_state.eks.outputs.aws_region
 }
 
 data "aws_eks_cluster" "this" {
-  name = data.terraform_remote_state.eks.outputs.eks_cluster_name
+  name = local.eks_cluster_name
 }
 
 data "aws_eks_cluster_auth" "this" {
-  name = data.terraform_remote_state.eks.outputs.eks_cluster_name
+  name = local.eks_cluster_name
+}
+
+locals {
+  cluster_endpoint = data.aws_eks_cluster.this.endpoint
+  ca_certificate   = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
+  auth_token       = data.aws_eks_cluster_auth.this.token
+}
+
+provider "aws" {
+  region  = local.aws_region
+  profile = "tf-user"
 }
 
 provider "kubernetes" {
-  host                   = data.aws_eks_cluster.this.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
-  token                  = data.aws_eks_cluster_auth.this.token
+  host                   = local.cluster_endpoint
+  cluster_ca_certificate = local.ca_certificate
+  token                  = local.auth_token
   # exec {
   #   api_version = "client.authentication.k8s.io/v1beta1"
   #   command     = "aws"
   #   args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.this.name]
   # }
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = local.cluster_endpoint
+    cluster_ca_certificate = local.ca_certificate
+    token                  = local.auth_token
+  }
 }

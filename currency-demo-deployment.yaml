@@ -18,19 +18,19 @@ spec:
       - image: byckg3/currency-demo
         name: currency-demo-ctr
         ports:
-        - name: http-port
+        - name: demo-http-port
           containerPort: 8081
         readinessProbe:
           initialDelaySeconds: 20 # Defaults to 0 seconds. Minimum value is 0.
           periodSeconds: 5        # Default to 10 seconds. The minimum value is 1. 
           httpGet:
             path: /currencies
-            port: http-port
+            port: demo-http-port
         livenessProbe:
           initialDelaySeconds: 30
           httpGet:
             path: /currencies
-            port: http-port
+            port: demo-http-port
         resources:
           limits:
             memory: "256Mi"
@@ -46,4 +46,4 @@ spec:
 #     app: currency-demo
 #   ports:
 #   - port: 80
-#     targetPort: http-port
+#     targetPort: demo-http-port
