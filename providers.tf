@@ -11,8 +11,9 @@ data "terraform_remote_state" "eks" {
 
 # Retrieve EKS cluster information
 locals {
-  eks_cluster_name = data.terraform_remote_state.eks.outputs.eks_cluster_name
-  aws_region       = data.terraform_remote_state.eks.outputs.aws_region
+  aws_region            = data.terraform_remote_state.eks.outputs.aws_region
+  eks_cluster_name      = data.terraform_remote_state.eks.outputs.eks_cluster_name
+  eks_oidc_provider_arn = data.terraform_remote_state.eks.outputs.eks_oidc_provider_arn
 }
 
 data "aws_eks_cluster" "this" {
@@ -41,7 +42,7 @@ provider "kubernetes" {
   # exec {
   #   api_version = "client.authentication.k8s.io/v1beta1"
   #   command     = "aws"
-  #   args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.this.name]
+  #   args        = ["eks", "get-token", "--cluster-name", data.eks_cluster.this.name]
   # }
 }
 

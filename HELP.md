@@ -4,6 +4,8 @@
 - terraform init
 - terraform fmt
 - terraform destroy -auto-approve
+- terraform destroy -target <RESOURCE_NAME>
+- terraform apply -replace=<RESOURCE_NAME>
 
 
 ### aws cli commands
