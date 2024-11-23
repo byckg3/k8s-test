@@ -14,12 +14,16 @@ spec:
       labels:
         app: currency-demo
     spec:
+      securityContext:
+        runAsNonRoot: true
+        # runAsUser: 1000
       containers:
       - image: byckg3/currency-demo
         name: currency-demo-ctr
         ports:
         - name: demo-http-port
           containerPort: 8081
+        terminationMessagePolicy: FallbackToLogsOnError
         readinessProbe:
           initialDelaySeconds: 20 # Defaults to 0 seconds. Minimum value is 0.
           periodSeconds: 5        # Default to 10 seconds. The minimum value is 1. 
@@ -32,8 +36,10 @@ spec:
             path: /currencies
             port: demo-http-port
         resources:
+          requests:
+            memory: "250Mi"
           limits:
-            memory: "256Mi"
+            memory: "300Mi"
             cpu: "500m"
 # ---
 # apiVersion: v1
