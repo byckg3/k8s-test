@@ -15,5 +15,10 @@ resource "kubernetes_manifest" "demo_service" {
 resource "kubernetes_manifest" "demo_ingress" {
   manifest = provider::kubernetes::manifest_decode(file("${path.module}/currency-demo-ingress.yaml"))
 
-  depends_on = [helm_release.alb_ingress_controller]
+  wait {
+    fields = {
+      # Check an ingress has an IP
+      "status.loadBalancer.ingress[0].ip" = "^(\\d+(\\.|$)){4}"
+    }
+  }
 }

@@ -16,5 +16,12 @@ spec:
         backend:
           service:
             name: currency-demo-svc
+            port: 
+              name: http
+      - path: /coindesk
+        pathType: Prefix
+        backend:
+          service:
+            name: currency-demo-svc
             port:
-              number: 80
+              name: http

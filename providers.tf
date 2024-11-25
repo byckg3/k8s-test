@@ -45,11 +45,3 @@ provider "kubernetes" {
   #   args        = ["eks", "get-token", "--cluster-name", data.eks_cluster.this.name]
   # }
 }
-
-provider "helm" {
-  kubernetes {
-    host                   = local.cluster_endpoint
-    cluster_ca_certificate = local.ca_certificate
-    token                  = local.auth_token
-  }
-}
